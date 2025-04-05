@@ -39,7 +39,6 @@
     ]
   },
   "devDependencies": {
-    "tailwindcss": "^3.3.3"
   },
   "homepage": "https://mayozoz.github.io/zebrafish-lab-image-analysis-tool/"
 }
