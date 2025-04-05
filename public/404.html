@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Redirecting...</title>
+    <script>
+      // Single-page app redirection
+      (function() {
+        // Get the current path after the domain
+        var path = window.location.pathname;
+        var repo = '/zebrafish-lab-image-analysis-tool';
+        
+        // If the path starts with the repo name, remove it
+        if (path.indexOf(repo) === 0) {
+          path = path.substr(repo.length);
+        }
+        
+        // Redirect to the index.html with the path as a hash
+        window.location.href = window.location.origin + repo + '/#' + path;
+      })();
+    </script>
+  </head>
+  <body>
+    <p>Redirecting...</p>
+  </body>
+</html>
