@@ -134,7 +134,7 @@ const ThrombosisAnalyzer = () => {
   }, [files]);
 
   return (
-    <div class="page">
+    <div className="page">
       <header className="bg-blue-700 text-white p-4 shadow-md">
         <h1 className="text-2xl font-bold">Zebrafish Thrombosis Analyzer</h1>
         <p className="text-sm opacity-80">Upload and analyze zebrafish thrombosis images</p>
@@ -217,7 +217,6 @@ const ThrombosisAnalyzer = () => {
                   onChange={(e) => setBlobSize(parseInt(e.target.value))}
                   className="blob-size-input"
                 />
-                {/* <span className="w-12 text-center bg-gray-100 p-1 rounded text-sm">{blobSize}</span> */}
               </div>
               <p className="text-xs text-gray-500 mt-1">
                 Adjust this parameter to control the minimum size of clots to detect. Higher values detect only larger clots.
