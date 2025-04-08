@@ -1,5 +1,6 @@
 {
-  "name": "my-app",
+  "name": "zebrafish-lab-image-analysis-tool",
+  "homepage": "https://mayozoz.github.io/zebrafish-lab-image-analysis-tool",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -37,6 +38,5 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  },
-  "homepage": "."
+  }
 }
