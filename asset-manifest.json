@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/zebrafish-lab-image-analysis-tool/static/css/main.3d2ed367.css",
+    "main.js": "/zebrafish-lab-image-analysis-tool/static/js/main.ea511520.js",
+    "static/js/453.5f275f76.chunk.js": "/zebrafish-lab-image-analysis-tool/static/js/453.5f275f76.chunk.js",
+    "index.html": "/zebrafish-lab-image-analysis-tool/index.html",
+    "main.3d2ed367.css.map": "/zebrafish-lab-image-analysis-tool/static/css/main.3d2ed367.css.map",
+    "main.ea511520.js.map": "/zebrafish-lab-image-analysis-tool/static/js/main.ea511520.js.map",
+    "453.5f275f76.chunk.js.map": "/zebrafish-lab-image-analysis-tool/static/js/453.5f275f76.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.3d2ed367.css",
+    "static/js/main.ea511520.js"
+  ]
+}
