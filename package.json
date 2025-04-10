@@ -1,6 +1,6 @@
 {
   "name": "zebrafish-lab-image-analysis-tool",
-  "homepage": "https://mayozoz.github.io/zebrafish-lab-image-analysis-tool",
+  "homepage": ".",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
