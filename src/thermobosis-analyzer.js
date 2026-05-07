@@ -133,19 +133,48 @@ const ThrombosisAnalyzer = () => {
     };
   }, [files]);
 
+  const uploadedCount = files.length;
+  const averageScore = results
+    ? (
+        results.processedFiles.reduce((total, file) => total + Number(file.score), 0) /
+        results.processedFiles.length
+      ).toFixed(4)
+    : null;
+
   return (
-    <div className="page">
-      <header className="bg-blue-700 text-white p-4 shadow-md">
-        <h1 className="text-2xl font-bold">Zebrafish Thrombosis Analyzer</h1>
-        <p className="text-sm opacity-80">Upload and analyze zebrafish thrombosis images</p>
+    <div className="analyzer-page">
+      <header className="analyzer-header">
+        <div>
+          <p className="eyebrow">Lab Image Workflow</p>
+          <h1>Zebrafish Thrombosis Analyzer</h1>
+          <p>Upload microscopy images, tune clot detection, and export analysis scores.</p>
+        </div>
+        <div className="header-stats" aria-label="Current upload summary">
+          <span>{uploadedCount}</span>
+          <small>{uploadedCount === 1 ? 'image loaded' : 'images loaded'}</small>
+        </div>
       </header>
-      
-      <main className="flex-1 container mx-auto px-4 py-6 max-w-5xl">
-        <div className="bg-white rounded-lg shadow-md p-6 mb-6">
-          <h2 className="text-xl font-semibold mb-4">Image Upload</h2>
-          
-          <div 
-            className={`border-2 border-dashed rounded-lg p-6 mb-4 cursor-pointer transition-colors ${isDragActive ? 'border-blue-500 bg-blue-50' : 'border-gray-300 hover:border-blue-400'}`}
+
+      <main className="analyzer-main">
+        <section className="panel upload-panel">
+          <div className="section-heading">
+            <div>
+              <p className="eyebrow">Step 1</p>
+              <h2>Image Upload</h2>
+            </div>
+            <label className="preview-toggle" htmlFor="preview-toggle">
+              <input
+                type="checkbox"
+                id="preview-toggle"
+                checked={showPreview}
+                onChange={() => setShowPreview(!showPreview)}
+              />
+              <span>Previews</span>
+            </label>
+          </div>
+
+          <div
+            className={`drop-zone ${isDragActive ? 'drop-zone-active' : ''}`}
             onClick={handleFileInputClick}
             onDragEnter={handleDragEnter}
             onDragOver={handleDragOver}
@@ -158,49 +187,39 @@ const ThrombosisAnalyzer = () => {
               onChange={handleFileChange}
               accept=".tif,.tiff,.png,image/tiff,image/png"
               multiple
-              className="hidden"
+              className="file-input"
             />
-            <div className="text-center">
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12 mx-auto text-gray-400 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <div className="drop-zone-content">
+              <div className="upload-icon" aria-hidden="true">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
               </svg>
-              <p className="text-gray-600">
+              </div>
+              <p className="drop-title">
                 {isDragActive ? 'Drop the files here' : 'Drag & drop images here, or click to select files'}
               </p>
-              <p className="text-sm text-gray-500 mt-1">Supported formats: .tif, .tiff, .png</p>
+              <p className="drop-subtitle">Supported formats: .tif, .tiff, .png</p>
             </div>
           </div>
-          
-          <div className="flex justify-between items-center mb-4">
-            <div className="flex items-center">
+
+          <div className="control-row">
               <button 
                 onClick={() => setShowAdvanced(!showAdvanced)}
-                className="text-blue-600 text-sm flex items-center"
+              className="secondary-button"
               >
                 {showAdvanced ? 'Hide' : 'Show'} Advanced Options
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <svg xmlns="http://www.w3.org/2000/svg" className="button-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={showAdvanced ? "M5 15l7-7 7 7" : "M19 9l-7 7-7-7"} />
                 </svg>
               </button>
-            </div>
-            <div className="flex items-center">
-              <input 
-                type="checkbox" 
-                id="preview-toggle" 
-                checked={showPreview} 
-                onChange={() => setShowPreview(!showPreview)}
-                className="mr-2"
-              />
-              <label htmlFor="preview-toggle" className="text-sm">Show Image Previews</label>
-            </div>
           </div>
           
           {showAdvanced && (
-            <div className="bg-gray-50 p-4 rounded-md mb-4">
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+            <div className="advanced-panel">
+              <label className="field-label">
                 Blob Size Parameter
               </label>
-              <div className="flex items-center">
+              <div className="range-row">
                 <input
                   type="range"
                   min="10"
@@ -218,60 +237,56 @@ const ThrombosisAnalyzer = () => {
                   className="blob-size-input"
                 />
               </div>
-              <p className="text-xs text-gray-500 mt-1">
+              <p className="field-help">
                 Adjust this parameter to control the minimum size of clots to detect. Higher values detect only larger clots.
               </p>
             </div>
           )}
           
           {files.length > 0 && (
-            <>
-              <h3 className="font-medium mt-6 mb-2">Uploaded Images ({files.length})</h3>
-              <ul className="border rounded-md divide-y max-h-60 overflow-y-auto">
+            <div className="file-section">
+              <h3>Uploaded Images ({files.length})</h3>
+              <ul className="file-list">
                 {files.map((file, index) => (
-                  <li key={index} className="p-3 flex items-center justify-between">
-                    <div className="flex items-center">
+                  <li key={index} className="file-item">
+                    <div className="file-details">
                       {showPreview && file.preview && (
                         <img 
                           src={file.preview} 
                           alt={file.name}
-                          className="h-12 w-12 object-cover rounded mr-3"
+                          className="file-thumbnail"
                         />
                       )}
                       <div>
-                        <div className="font-medium">{file.name}</div>
-                        <div className="text-xs text-gray-500">
+                        <div className="file-name">{file.name}</div>
+                        <div className="file-meta">
                           {typeof file.size === 'number' ? (file.size / 1024).toFixed(1) : '?'} KB
                         </div>
                       </div>
                     </div>
                     <button 
                       onClick={() => removeFile(file.name)}
-                      className="text-red-500 hover:text-red-700"
+                      className="remove-button"
+                      aria-label={`Remove ${file.name}`}
                     >
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                       </svg>
                     </button>
                   </li>
                 ))}
               </ul>
-            </>
+            </div>
           )}
           
-          <div className="mt-6">
             <button
               onClick={processFiles}
               disabled={isProcessing || files.length === 0}
-              className={`py-2 px-4 rounded-md flex items-center justify-center w-full font-medium ${
-                isProcessing || files.length === 0 
-                  ? 'bg-gray-300 cursor-not-allowed text-gray-500' 
-                  : 'bg-blue-600 hover:bg-blue-700 text-white'
-              }`}
+            className="primary-button"
             >
               {isProcessing ? (
                 <>
-                  <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                  <svg className="spinner" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                     <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                     <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                   </svg>
@@ -281,52 +296,60 @@ const ThrombosisAnalyzer = () => {
                 <>Analyze Images</>
               )}
             </button>
-          </div>
-        </div>
+        </section>
         
         {results && (
-          <div className="bg-white rounded-lg shadow-md p-6">
-            <h2 className="text-xl font-semibold mb-4">Analysis Results</h2>
-            
-            <div className="mb-6">
+          <section className="panel results-panel">
+            <div className="section-heading">
+              <div>
+                <p className="eyebrow">Step 2</p>
+                <h2>Analysis Results</h2>
+              </div>
+              <div className="result-summary">
+                <span>{averageScore}</span>
+                <small>average score</small>
+              </div>
+            </div>
+
+            <div className="results-actions">
               <button
                 onClick={downloadResults}
-                className="bg-green-600 text-white py-2 px-4 rounded-md hover:bg-green-700 flex items-center"
+                className="download-button"
               >
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg xmlns="http://www.w3.org/2000/svg" className="button-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                 </svg>
                 Download CSV Results
               </button>
             </div>
             
-            <div className="border rounded-md">
-              <div className="bg-gray-50 p-3 border-b grid grid-cols-3 font-medium">
+            <div className="results-table">
+              <div className="results-header">
                 <div>Image</div>
                 <div>Score</div>
                 <div>Region of Interest</div>
               </div>
-              <div className="divide-y max-h-96 overflow-y-auto">
+              <div className="results-body">
                 {results.processedFiles.map((file, index) => (
-                  <div key={index} className="p-3 grid grid-cols-3 items-center">
-                    <div className="truncate">{file.originalName}</div>
-                    <div>{file.score}</div>
+                  <div key={index} className="result-row">
+                    <div className="result-name">{file.originalName}</div>
+                    <div className="score-pill">{file.score}</div>
                     <div>
                       <img 
                         src={file.roi} 
                         alt={`ROI for ${file.originalName}`} 
-                        className="h-16 object-contain"
+                        className="roi-image"
                       />
                     </div>
                   </div>
                 ))}
               </div>
             </div>
-          </div>
+          </section>
         )}
       </main>
       
-      <footer className="bg-gray-100 border-t p-4 text-center text-sm text-gray-600">
+      <footer className="analyzer-footer">
         Zebrafish Thrombosis Analysis Tool
       </footer>
     </div>

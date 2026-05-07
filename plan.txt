@@ -1,0 +1,24 @@
+I have completed building the frontend app of this zebrafish lab image analysis tool which i have pasted below.
+how can i connect the backend with the frontend? 
+my coworker has provided me with this jupyter notebook, and it has a lot of information and data so i dont think I can send the entire thing in this chat.
+it has chunks of code with titles:
+# Create Dataframe of File Information
+## Convert Files to PNG (Don't run more than once)
+## Visualizing Distribution by Classes
+## Visualizing Distribution by Folder
+## CTCF Calculator
+    Takes in the ROI from the blob detector
+## Blob Detector
+## Loading and Analyzing Complete Function
+## Run Algorithm
+and there are also a lot of image plots with these values 
+Normalized CTCF: 0.00259761050990214, CTCF: 13247.813600500913, roi_area: 208
+Mean normalized CTCF: 0.003924713302120291
+and then another code chunk for individual testing that had diff image plots and results like this
+Normalized CTCF: 1.3899826984299688, CTCF: 7088911.761992841, roi_area: 125316
+File: /7_6F_1.png, Exists: True
+Rotated Rectangle: Center=(691.5810546875, 119.12734985351562), Size=(1072.9508056640625, 502.81500244140625), Angle=18.170612335205078
+# Visualize Score Distribution
+# Cleaning Data
+# Plotting Data
+# Classifier
